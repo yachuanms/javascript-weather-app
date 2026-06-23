@@ -3,7 +3,11 @@
 const weatherForm = document.querySelector(".weatherForm");
 const cityInput = document.querySelector(".cityInput");
 const card = document.querySelector(".card");
-const apiKey = "9431c0ca546451bec882c8dba3b47797";
+const history = document.querySelector(".history");
+const apiKey = "YOUR_API_KEY";
+let isCelsius = false;
+let currentWeatherData = "";
+let searchHistory = [];
 
 weatherForm.addEventListener("submit",async event=>{
     event.preventDefault();
@@ -13,7 +17,10 @@ weatherForm.addEventListener("submit",async event=>{
     if(city){
         try{
             const weatherData = await getWeatherData(city);
-            displayWeatherInfo(weatherData);
+            currentWeatherData = weatherData;
+            searchHistory.push(city);
+            console.log(`search history: ${searchHistory}`);
+            displayWeatherInfo(currentWeatherData);
         }catch(error){
             console.error(error);
             displayError(error);
@@ -38,38 +45,69 @@ async function getWeatherData(city) {
     
 }
 
+function CFTransition(){
+
+    let CFBtn = document.getElementById("CF");
+    
+    if(isCelsius){
+        isCelsius = false;
+        CFBtn.textContent = "°F -> °C";
+    }else{
+        isCelsius = true;
+        CFBtn.textContent = "°C -> °F";
+    }
+    displayWeatherInfo(currentWeatherData);
+}
+
 function displayWeatherInfo(data){
 
     const {name: city, 
            main: {temp, humidity}, 
            weather:[{description, id}]} = data;
+    
 
     card.textContent = "";
     card.style.display = "flex";
+    history.textContent = "";
+    history.style.display = "flex";
     
     const cityDisplay = document.createElement("h1");
     const tempDisplay = document.createElement("p");
     const humidityDisplay = document.createElement("p");
     const descDisplay = document.createElement("p");
     const weatherEmoji = document.createElement("p");
+    const searchHistoryDisplay = document.createElement("p"); 
+
 
     cityDisplay.textContent = city;
-    tempDisplay.textContent = `${(temp-273.15).toFixed(1)}°C`;
+    let trueTemp;
+    let CF = "";
+    if(isCelsius){
+        trueTemp = (temp-273.15).toFixed(1);
+        CF = "°C";
+    }else{
+        trueTemp = ((temp-273.15)*9/5+32).toFixed(1);
+        CF = "°F";
+    }
+    tempDisplay.textContent = `${trueTemp}${CF}`;
     humidityDisplay.textContent = `Humidity: ${humidity}`;
     descDisplay.textContent = description;
     weatherEmoji.textContent = getWeatherEmoji(id);
+    searchHistoryDisplay.textContent = `Search History: ${searchHistory}`;
 
     cityDisplay.classList.add("cityDisplay");
     tempDisplay.classList.add("tempDisplay");
     humidityDisplay.classList.add("humidityDisplay");
     descDisplay.classList.add("descDisplay");
     weatherEmoji.classList.add("weatherEmoji");
+    searchHistoryDisplay.classList.add("searchHistoryDisplay");
 
     card.appendChild(cityDisplay);
     card.appendChild(tempDisplay);
     card.appendChild(humidityDisplay);
     card.appendChild(descDisplay);
     card.appendChild(weatherEmoji);
+    history.appendChild(searchHistoryDisplay);
 
 
 }

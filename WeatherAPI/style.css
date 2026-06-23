@@ -30,6 +30,7 @@ button[type="submit"]{
     border:none;
     border-radius: 10px;
     cursor: pointer;
+    margin: 0 10px;
 }
 
 button[type="submit"]:hover{
@@ -46,6 +47,18 @@ button[type="submit"]:hover{
     flex-direction: column;
     align-items: center;
     border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.history{
+    padding: 50px;
+    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    margin-bottom: 15px;
 }
 
 h1{

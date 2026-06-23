@@ -11,11 +11,11 @@
     <form class="weatherForm">
         <input type="text" class="cityInput" placeholder="Enter City:">
         <button type="submit">Get Weather</button>
+        <button type="submit" id="CF" onclick="CFTransition()">°C -> °F</button>
     </form>
 
-    <div class="card" style="display: none">
-
-    </div>
+    <div class="card" style="display: none"></div> <br>
+    <div class="history" id="searchHistoryDisplay" style="display: none"></div>
 
     <script src="index.js"></script>
 </body>
